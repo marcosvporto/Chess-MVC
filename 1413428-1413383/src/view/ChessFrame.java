@@ -11,24 +11,24 @@ import javax.swing.JPanel;
 public class ChessFrame extends JFrame {
 	
 	
-	private final int LARG_DEFAULT=1000;
-	private final int ALT_DEFAULT=1000;
+	//private final int LARG_DEFAULT=700;
+	//private final int ALT_DEFAULT=700;
 	
 	
-	public ChessFrame(String s) {
+	public ChessFrame(String s, int larg, int alt) {
 		super(s);
 		Toolkit tk=Toolkit.getDefaultToolkit();
 		Dimension screenSize=tk.getScreenSize();
 		
 		int sl=screenSize.width;
 		int sa=screenSize.height;
-		int x=sl/2-LARG_DEFAULT/2;
-		int y=sa/2-ALT_DEFAULT/2;
+		int x=sl/2-larg/2;
+		int y=sa/2-alt/2;
 		
-		setBounds(x,y,LARG_DEFAULT,ALT_DEFAULT);
+		setBounds(x,y,larg,alt);
 		
 		
-		setSize(LARG_DEFAULT,ALT_DEFAULT);
+		setSize(larg,alt);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
