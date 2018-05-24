@@ -23,7 +23,7 @@ public abstract class Peca {
 		this.qtdMovimentos = 0;
 		this.coluna = coluna;
 		this.linha = linha;
-		String url = "C:\\Users\\marco\\Downloads\\Chess-MVC-master\\Chess-MVC-master\\1413428-1413383\\src\\images\\"+cor+"_"+tipo.getTipo()+".gif";
+		String url = "src/images/"+cor+"_"+tipo.getTipo()+".gif";
 		try {
 			this.img = ImageIO.read(new File(url));
 		}catch(IOException ex) {
