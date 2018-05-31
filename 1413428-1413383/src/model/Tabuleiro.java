@@ -11,7 +11,7 @@ public class Tabuleiro {
 	int top;
 	int left;
 	Casa[][] matrizCasas;
-	Rectangle2D [][] matrizRetangulos;
+	//Rectangle2D [][] matrizRetangulos;
 	Casa selecionada = null;
 	boolean casaSelecionada = false; 
 	
@@ -24,12 +24,12 @@ public class Tabuleiro {
 		this.top = top;
 		this.left = left;
 		matrizCasas = new Casa[8][8];
-		matrizRetangulos = new Rectangle2D[8][8];
+		//matrizRetangulos = new Rectangle2D[8][8];
 		
 		for(i=0;i<8;i++) {
 			for(j=0;j<8;j++) {
 				matrizCasas[i][j] = new Casa(i,j,dimCasa,left+(i*dimCasa),top+(j*dimCasa));
-				matrizRetangulos[i][j] = matrizCasas[i][j].getRetangulo();
+				//matrizRetangulos[i][j] = matrizCasas[i][j].getRetangulo();
 			}
 		}
 	}
@@ -38,23 +38,23 @@ public class Tabuleiro {
 		return matrizCasas;
 	}
 	
-	public Rectangle2D[][] getMatrizRetangulos() {
+	/*public Rectangle2D[][] getMatrizRetangulos() {
 		return matrizRetangulos;
-	}
+	}*/
 	public Casa getCasaSelecionada() {
 		if(this.casaSelecionada)
 			return this.selecionada;
 		else return null;
 	}
 	public void selecionaCasa(int x, int y) {
-		
+		Movimento m = new Movimento(this.getMatrizCasas());
 		for( int i=0 ; i<8 ; i++ ) {
 			for( int j=0 ; j<8 ; j ++ ) {
 				
 				if(this.matrizCasas[i][j].getRetangulo().contains(x,y) && this.matrizCasas[i][j].isOcupada()) {
 					
 					if(this.casaSelecionada && this.matrizCasas[i][j].getPeca().getCor()!=this.selecionada.getPeca().getCor()) {
-						Movimento.validaAtaque(this.selecionada, this.matrizCasas[i][j]);
+						m.validaAtaque(this.selecionada, this.matrizCasas[i][j]);
 						this.selecionada.desselecionaCasa();
 						this.selecionada = null;
 						this.casaSelecionada = false;
@@ -74,7 +74,7 @@ public class Tabuleiro {
 					
 				}
 				else if(this.matrizCasas[i][j].getRetangulo().contains(x,y) && this.casaSelecionada) {
-					Movimento.validaMovimento(this.selecionada, this.matrizCasas[i][j]);
+					m.validaMovimento(this.selecionada, this.matrizCasas[i][j]);
 					
 					this.selecionada.desselecionaCasa();
 					this.selecionada = null;

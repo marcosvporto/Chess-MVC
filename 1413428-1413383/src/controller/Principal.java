@@ -7,14 +7,17 @@ import view.ChessFrame;
 import view.ChessPanel;
 
 public class Principal {
+	
+	public static Partida p;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 		ChessFrame f=new ChessFrame("XADREZ",680,700);
-		ChessPanel p = new ChessPanel();
-		Partida.comecarPartida(p,10,10,80);
-		f.getContentPane().add(p);
+		ChessPanel cp = new ChessPanel();
+		p = new Partida(10,10,80);
+		p.comecarPartida(cp);
+		f.getContentPane().add(cp);
 		f.setVisible(true);
 		
 		

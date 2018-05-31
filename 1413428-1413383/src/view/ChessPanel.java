@@ -71,15 +71,15 @@ public class ChessPanel extends JPanel {
 	}
 	
 	public void carregarTabuleiro(Graphics2D g2d) {
-		Rectangle2D [][]r = t.getMatrizRetangulos();
+		Casa [][]r = t.getMatrizCasas();
 		for(int i = 0;i<8;i++) {
 			for(int j = 0;j<8;j++) {
 				//System.out.println(r[i][j].getCenterX());
-				g2d.draw(r[i][j]);
+				g2d.draw(r[i][j].getRetangulo());
 				if((i%2==0) && (j%2!=0))
-					g2d.fill(r[i][j]);
+					g2d.fill(r[i][j].getRetangulo());
 				else if((i%2!=0) && (j%2==0))
-					g2d.fill(r[i][j]);
+					g2d.fill(r[i][j].getRetangulo());
 				
 				
 				
@@ -104,12 +104,12 @@ public class ChessPanel extends JPanel {
 	}
 	public void alteraCorCasaSelecionada(Graphics2D g2d) {
 		Casa [][]c = t.getMatrizCasas();
-		Rectangle2D [][]r = t.getMatrizRetangulos();
+		//Rectangle2D [][]r = t.getMatrizRetangulos();
 		for(int i = 0;i<8;i++) {
 			for(int j=0;j<8;j++) {
 				if(c[i][j].equals(t.getCasaSelecionada())) {
 					g2d.setPaint(Color.GRAY);
-					g2d.fill(r[i][j]);
+					g2d.fill(c[i][j].getRetangulo());
 				}
 				/*if(c[i][j].getPermissao()) {
 					g2d.setPaint(Color.GREEN);

@@ -62,9 +62,9 @@ public abstract class Peca {
 	
 	public void selecionaPeca() {
 		this.selecionada = true;
-		System.out.println(this.tipo.getTipo());
-		System.out.println("linha:"+String.valueOf(this.getLinha()));
-		System.out.println("coluna:"+String.valueOf(this.getColuna()));
+		//System.out.println(this.tipo.getTipo());
+		//System.out.println("linha:"+String.valueOf(this.getLinha()));
+		//System.out.println("coluna:"+String.valueOf(this.getColuna()));
 	}
 	
 	public void desselecionaPeca() {
