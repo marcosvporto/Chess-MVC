@@ -6,9 +6,18 @@ import model.*;
 
 public class Partida {
 	
-	public static void comecarPartida(ChessPanel p,int top,int left,int dimCasa) {
+	
+	static Tabuleiro t;
+	
+	public Partida(int top,int left,int dimCasa) {
+		
+		t = new Tabuleiro(top,left,dimCasa);
+		
+	}
+	
+	public static void comecarPartida(ChessPanel p) {
 		Casa[][] c;
-		Tabuleiro t = new Tabuleiro(top,left,dimCasa);
+		//Tabuleiro t = new Tabuleiro(top,left,dimCasa);
 		c = t.getMatrizCasas();
 		for(int i = 0;i<8;i++) {
 			switch(i) {
@@ -45,11 +54,4 @@ public class Partida {
 		
 	}
 	
-	
-			
-			
-			
-		
-	
-
 }

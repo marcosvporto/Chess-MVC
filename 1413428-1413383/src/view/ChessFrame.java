@@ -29,7 +29,7 @@ public class ChessFrame extends JFrame {
 		
 		
 		setSize(larg,alt);
-		
+		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
