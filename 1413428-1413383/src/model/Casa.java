@@ -8,7 +8,7 @@ public class Casa {
 	int linha;
 	int top;
 	int left;
-	Peca p;
+	public Peca p;
 	Peca pretendente;
 	Rectangle2D rect;
 	boolean ocupada=false;
@@ -25,6 +25,39 @@ public class Casa {
 		this.selecionada = false;
 		this.ocupada = false;
 		
+		if( linha == 0 ) {
+			switch(coluna) {
+			case 0: setPeca(new Torre(  'p', linha, coluna));break;
+			case 1: setPeca(new Cavalo( 'p', linha, coluna));break;
+			case 2: setPeca(new Bispo(  'p', linha, coluna));break;
+			case 3: setPeca(new Dama(   'p', linha, coluna));break;
+			case 4: setPeca(new Rei(    'p', linha, coluna));break;
+			case 5: setPeca(new Bispo(  'p', linha, coluna));break;
+			case 6: setPeca(new Cavalo( 'p', linha, coluna));break;
+			case 7: setPeca(new Torre(  'p', linha, coluna));break;
+			}
+		}
+		if (linha == 7) {
+			switch(coluna) {
+			case 0: setPeca(new Torre(  'b', linha, coluna));break;
+			case 1: setPeca(new Cavalo( 'b', linha, coluna));break;
+			case 2: setPeca(new Bispo(  'b', linha, coluna));break;
+			case 3: setPeca(new Dama(   'b', linha, coluna));break;
+			case 4: setPeca(new Rei(    'b', linha, coluna));break;
+			case 5: setPeca(new Bispo(  'b', linha, coluna));break;
+			case 6: setPeca(new Cavalo( 'b', linha, coluna));break;
+			case 7: setPeca(new Torre(  'b', linha, coluna));break;
+			}
+		}
+		
+		if(linha == 1) {
+			setPeca(new Peao(  'p', linha, coluna));
+		}
+			
+		if(linha == 6) {
+			setPeca(new Peao(  'b', linha, coluna));
+		}
+		
 		
 	}
 	
@@ -40,6 +73,7 @@ public class Casa {
 	}
 	public void setPeca( Peca p ) {
 		this.p = p;
+		//this.p.incrementaMovimento();
 		this.ocupada = true;
 	}
 	public int getTop() {

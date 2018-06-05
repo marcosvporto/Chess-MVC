@@ -12,10 +12,11 @@ public abstract class Peca {
 	char cor;
 	private TipoPeca tipo;
 	private Image img;
-	int qtdMovimentos;
+	public static int qtdMovimentos;
 	int linha;
 	int coluna;
 	boolean selecionada;
+	int qtdMovimentosPossiveis;
 	
 	public Peca(TipoPeca tipo, char cor, int linha, int coluna) {
 		this.cor = cor;
@@ -23,6 +24,7 @@ public abstract class Peca {
 		this.qtdMovimentos = 0;
 		this.coluna = coluna;
 		this.linha = linha;
+		this.qtdMovimentosPossiveis = 2;
 		String url = "src/images/"+cor+"_"+tipo.getTipo()+".gif";
 		try {
 			this.img = ImageIO.read(new File(url));
@@ -36,7 +38,8 @@ public abstract class Peca {
 	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estão os x possíveis e na segunda coluna estão os y possíveis 
 	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peça referente a algum movimento possível
 	 * considerando a localização atual da peça */
-	public abstract int[][] getMovimentos(); 
+	public abstract int[][] getMovimentos(int linhaCasa, int colunaCasa, char cor); 
+	
 	public void setImage(Image img) {
 		this.img = img;
 	}
@@ -73,6 +76,10 @@ public abstract class Peca {
 	
 	public char getCor() {
 		return this.cor;
+	}
+	
+	public void incrementaMovimento() {
+		this.qtdMovimentos = this.qtdMovimentos + 1;
 	}
 
 

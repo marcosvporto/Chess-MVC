@@ -15,16 +15,16 @@ public class Principal {
 		
 		ChessFrame f=new ChessFrame("XADREZ",680,700);
 		ChessPanel cp = new ChessPanel();
+		
 		p = new Partida(10,10,80);
+		
+		//se for nova partida
 		p.comecarPartida(cp);
+		
+		//se for restaurar partida
+		//p.restaurarPartida(cp, arquivo.txt);
+		
 		f.getContentPane().add(cp);
 		f.setVisible(true);
-		
-		
-
-		
-		
-
 	}
-
 }

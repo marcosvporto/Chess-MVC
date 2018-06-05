@@ -358,7 +358,8 @@ public class Movimento {
 		if (movimenta) {
 			
 			destino.setPeca(origem.popPeca());
-			this.qtdMovimentos++;
+			//this.qtdMovimentos++;
+			//origem.p.incrementaMovimento();
 		}
 	}
 	

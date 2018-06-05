@@ -9,12 +9,12 @@ public class Cavalo extends Peca {
 	}
 
 	@Override
-	public int[][] getMovimentos() {
-		int [][]mov = new int[2][2];
-		mov[0][0] = coluna;
-		mov[0][1] = linha + 1;
-		mov[1][0] = coluna;
-		mov[1][1] = linha + 2;
+	public int[][] getMovimentos(int linhaCasa, int colunaCasa, char cor) {
+		int [][]mov = new int[8][8];
+		mov[0][0] = colunaCasa;
+		mov[0][1] = linhaCasa + 1;
+		mov[1][0] = colunaCasa;
+		mov[1][1] = linhaCasa + 2;
 		return mov;
 	}
 }
