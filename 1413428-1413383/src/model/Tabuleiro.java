@@ -71,6 +71,8 @@ public class Tabuleiro {
 
 				} else if (this.matrizCasas[i][j].getRetangulo().contains(x, y) && this.casaSelecionada) {
 					m.validaMovimento(this.selecionada, this.matrizCasas[i][j]);
+					
+					this.matrizCasas[i][j].p.incrementaMovimento();
 
 					this.selecionada.desselecionaCasa();
 					this.selecionada = null;

@@ -9,14 +9,15 @@ import javax.imageio.ImageIO;
 
 public abstract class Peca {
 	
-	char cor;
+	private char cor;
 	private TipoPeca tipo;
 	private Image img;
-	public static int qtdMovimentos;
+	int qtdMovimentos;
 	int linha;
 	int coluna;
 	boolean selecionada;
 	int qtdMovimentosPossiveis;
+
 	
 	public Peca(TipoPeca tipo, char cor, int linha, int coluna) {
 		this.cor = cor;
@@ -26,6 +27,7 @@ public abstract class Peca {
 		this.linha = linha;
 		this.qtdMovimentosPossiveis = 2;
 		String url = "src/images/"+cor+"_"+tipo.getTipo()+".gif";
+		
 		try {
 			this.img = ImageIO.read(new File(url));
 		}catch(IOException ex) {
@@ -35,9 +37,9 @@ public abstract class Peca {
 		}
 	}
 	
-	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estão os x possíveis e na segunda coluna estão os y possíveis 
-	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peça referente a algum movimento possível
-	 * considerando a localização atual da peça */
+	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estï¿½o os x possï¿½veis e na segunda coluna estï¿½o os y possï¿½veis 
+	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peï¿½a referente a algum movimento possï¿½vel
+	 * considerando a localizaï¿½ï¿½o atual da peï¿½a */
 	public abstract int[][] getMovimentos(int linhaCasa, int colunaCasa, char cor); 
 	
 	public void setImage(Image img) {
@@ -45,7 +47,11 @@ public abstract class Peca {
 	}
 	
 	public int getQtdMovimentos() {
-		return qtdMovimentos;
+		return this.qtdMovimentos;
+	}
+	
+	public void incrementaMovimento() {
+		this.qtdMovimentos = this.qtdMovimentos + 1;
 	}
 	
 	public TipoPeca getTipo() {
@@ -75,11 +81,7 @@ public abstract class Peca {
 	}
 	
 	public char getCor() {
-		return this.cor;
-	}
-	
-	public void incrementaMovimento() {
-		this.qtdMovimentos = this.qtdMovimentos + 1;
+		return cor;
 	}
 
 

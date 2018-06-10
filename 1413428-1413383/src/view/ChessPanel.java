@@ -1,6 +1,7 @@
 package view;
 
 import model.Peao;
+import model.Peca;
 import model.Bispo;
 import model.Casa;
 import model.Cavalo;
@@ -137,6 +138,7 @@ public class ChessPanel extends JPanel {
 			//         |coluna j    | coluna j    	| coluna j   	|  
 			
 			System.out.println(t.getCasaSelecionada().getPeca().getTipo());
+			System.out.println(t.getCasaSelecionada().getPeca().getQtdMovimentos());
 			
 			int cols = movimentos[0].length; 
 			
@@ -145,12 +147,29 @@ public class ChessPanel extends JPanel {
 
 				int linhaTabuleiro = movimentos[1][j];
 				int colunaTabuleiro = movimentos[0][j];
-				//System.out.println(linhaTabuleiro);
-				//System.out.println(colunaTabuleiro);
-					if(linhaTabuleiro>=0 && linhaTabuleiro <=7 && colunaTabuleiro >=0 && colunaTabuleiro <=7) {
-						pintaCasaSelecionada(Color.GRAY, c[linhaTabuleiro][colunaTabuleiro], g2d);
+				
+				//verifica se o i e j estao dentro do intervalo do tabuleiro
+				if(linhaTabuleiro>=0 && linhaTabuleiro <=7 && colunaTabuleiro >=0 && colunaTabuleiro <=7) {
+					
+					Casa casaSelecionada = t.getCasaSelecionada();
+					Casa casaPossivelMovimento = c[linhaTabuleiro][colunaTabuleiro];
+					
+					if(c[linhaTabuleiro][colunaTabuleiro].getPeca() != null) {
+						char tipoPeca = t.getMatrizCasas()[linhaTabuleiro][colunaTabuleiro].getPeca().getCor();
+						System.out.println(tipoPeca);
 					}
 					
+					//verifica se existe peca na casa && a cor da peca selecionada é diferente da cor da peca da casa
+					if( casaPossivelMovimento.getPeca()==null ) {
+						pintaCasaSelecionada(Color.GRAY, c[linhaTabuleiro][colunaTabuleiro], g2d);
+					} else {
+						if(casaPossivelMovimento.getPeca().getCor() != casaSelecionada.getPeca().getCor()) {
+							pintaCasaSelecionada(Color.GRAY, c[linhaTabuleiro][colunaTabuleiro], g2d);
+						}
+					}
+		
+					
+				}
 					
 			}//fim do for j
 		}//fim do if

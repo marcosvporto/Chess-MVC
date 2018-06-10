@@ -24,6 +24,7 @@ public class Casa {
 		this.rect = new Rectangle2D.Float(left,top,dim,dim);
 		this.selecionada = false;
 		this.ocupada = false;
+		this.p = null;
 		
 		if( linha == 0 ) {
 			switch(coluna) {
@@ -73,7 +74,6 @@ public class Casa {
 	}
 	public void setPeca( Peca p ) {
 		this.p = p;
-		//this.p.incrementaMovimento();
 		this.ocupada = true;
 	}
 	public int getTop() {

@@ -7,7 +7,7 @@ import model.Tabuleiro;
 public class Movimento {
 	
 	Casa [][] matrizCasa;
-	public static int qtdMovimentos = 0;
+
 	/*
 	public static void trataMovimento(Tabuleiro t) {
 		Casa [][]c = t.getMatrizCasas();
@@ -358,8 +358,7 @@ public class Movimento {
 		if (movimenta) {
 			
 			destino.setPeca(origem.popPeca());
-			//this.qtdMovimentos++;
-			//origem.p.incrementaMovimento();
+			
 		}
 	}
 	
@@ -378,7 +377,6 @@ public class Movimento {
 			
 			alvo.popPeca();
 			alvo.setPeca(atacante.popPeca());
-			this.qtdMovimentos++;
 			
 			
 			}
