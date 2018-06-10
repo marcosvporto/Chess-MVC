@@ -3,29 +3,13 @@ package controller;
 import model.Casa;
 import model.Peca;
 import model.Tabuleiro;
+import model.TipoPeca;
 
 public class Movimento {
 	
 	Casa [][] matrizCasa;
+	public static int qtdMovimentos = 0;
 
-	/*
-	public static void trataMovimento(Tabuleiro t) {
-		Casa [][]c = t.getMatrizCasas();
-		for( int i=0 ; i<8 ; i++) {
-			for( int j=0 ; j<8 ; j++ ) {
-				if( c[i][j].isSelecionada()) {
-					switch(c[i][j].getPeca().getTipo().getTipo()) {
-					case "peao" :   movimentoPeao(   c[i][j].getPeca() , t.getMatrizCasas());break;
-					case "bispo" :  movimentoBispo(  c[i][j].getPeca() , t.getMatrizCasas());break;
-					case "cavalo" : movimentoCavalo( c[i][j].getPeca() , t.getMatrizCasas());break;
-					case "torre" :  movimentoTorre(  c[i][j].getPeca() , t.getMatrizCasas());break;
-					case "rei" :    movimentoRei(    c[i][j].getPeca() , t.getMatrizCasas());break;
-					case "dama" :   movimentoDama(   c[i][j].getPeca() , t.getMatrizCasas());break;
-					}
-				}
-			}
-		}
-	}*/
 	public Movimento(Casa[][]c) {
 		this.matrizCasa = c;
 		
@@ -39,7 +23,8 @@ public class Movimento {
 				}
 				else if(origem.getLinha() == (destino.getLinha() -2)) {
 					if(origem.getLinha()==1) {
-						return true;
+						if(!matrizCasa[origem.getColuna()][2].isOcupada())
+							return true;
 					}
 				}
 			}
@@ -50,8 +35,10 @@ public class Movimento {
 					return true;
 				}
 				else if(origem.getLinha() == (destino.getLinha() +2)) {
-					if(origem.getLinha()==6)
-						return true;
+					if(origem.getLinha()==6) {
+						if(!matrizCasa[origem.getColuna()][5].isOcupada())
+							return true;
+					}
 				}
 			}
 		}
@@ -73,7 +60,7 @@ public class Movimento {
 		}
 		return false;
 	}
-	public boolean movimentoBispo(Casa origem, Casa destino, boolean ataque) {
+	public boolean movimentoBispo(Casa origem, Casa destino) {
 		
 		if(Math.abs(origem.getLinha() - destino.getLinha()) == Math.abs(origem.getColuna() - destino.getColuna())) {
 		
@@ -134,7 +121,7 @@ public class Movimento {
 		
 		
 	}
-	public boolean movimentoCavalo(Casa origem, Casa destino, boolean ataque) {
+	public boolean movimentoCavalo(Casa origem, Casa destino) {
 		
 		if(Math.abs(origem.getColuna() - destino.getColuna())==2 ) {
 			if(Math.abs(origem.getLinha() - destino.getLinha())==1) {
@@ -150,7 +137,7 @@ public class Movimento {
 		}
 		return false;
 	}
-	public boolean movimentoDama(Casa origem, Casa destino, boolean ataque) {
+	public boolean movimentoDama(Casa origem, Casa destino) {
 		
 		if(Math.abs(origem.getLinha() - destino.getLinha()) == Math.abs(origem.getColuna() - destino.getColuna()))
 		{
@@ -264,7 +251,7 @@ public class Movimento {
 		
 		
 	}
-	public boolean movimentoRei(Casa origem, Casa destino, boolean ataque) {
+	public boolean movimentoRei(Casa origem, Casa destino, boolean teste) {
 		
 		if(Math.abs(origem.getLinha() - destino.getLinha())==1 && Math.abs(origem.getColuna() - destino.getColuna())==1) {
 
@@ -278,9 +265,55 @@ public class Movimento {
 			
 			return true;
 		}
+		
+		//roque
+		if(Math.abs(origem.getLinha() - destino.getLinha())==0 && Math.abs(origem.getColuna() - destino.getColuna())==2) {
+			return validaRoque(origem,destino,teste);
+		}
 		return false;
 	}
-	public boolean movimentoTorre(Casa origem, Casa destino, boolean ataque) {
+	public boolean validaRoque(Casa origem, Casa destino, boolean teste) {
+		if(puloTorre(origem,destino) && origem.getPeca().getQtdMovimentos()==0) {
+			if(origem.getColuna() - destino.getColuna()<0) {//roque curto
+				
+				if(this.matrizCasa[7][origem.getLinha()].isOcupada() &&
+						this.matrizCasa[7][origem.getLinha()].getPeca().getTipo().equals(TipoPeca.torre) &&
+						this.matrizCasa[7][origem.getLinha()].getPeca().getQtdMovimentos()==0) {
+					//verifica se a torre está na posição inicial e ainda não se movimentou
+				
+					if(!this.matrizCasa[5][origem.getLinha()].isOcupada()) {
+						//verifica se o rei não pulou ninguém
+						if(!teste) {
+							this.matrizCasa[7][origem.getLinha()].getPeca().incMovimento();
+							this.matrizCasa[5][origem.getLinha()].setPeca(this.matrizCasa[7][origem.getLinha()].popPeca());
+
+							return true;
+						}
+						return true;
+					}
+				}
+			}
+			else {//roque longo
+				
+				if(this.matrizCasa[0][origem.getLinha()].isOcupada() &&
+						this.matrizCasa[0][origem.getLinha()].getPeca().getTipo().equals(TipoPeca.torre) &&
+						this.matrizCasa[0][origem.getLinha()].getPeca().getQtdMovimentos()==0) {
+					if(!this.matrizCasa[1][origem.getLinha()].isOcupada() &&
+							!this.matrizCasa[2][origem.getLinha()].isOcupada() &&
+							!this.matrizCasa[3][origem.getLinha()].isOcupada()) {
+						if(!teste) {
+							this.matrizCasa[0][origem.getLinha()].getPeca().incMovimento();
+							this.matrizCasa[3][origem.getLinha()].setPeca(this.matrizCasa[0][origem.getLinha()].popPeca());
+							return true;
+						}
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	public boolean movimentoTorre(Casa origem, Casa destino) {
 		
 		if(Math.abs(origem.getLinha() - destino.getLinha())==0) {
 			
@@ -345,20 +378,27 @@ public class Movimento {
 	}
 
 	public void validaMovimento(Casa origem, Casa destino) {
-		//destino.setPeca(origem.popPeca());
+
 		Boolean movimenta = false;
 		switch (origem.getPeca().getTipo().getTipo()) {
 		case "peao" :   movimenta = movimentoPeao(   origem,destino);break;
-		case "bispo" :  movimenta = movimentoBispo(  origem,destino,false)?puloBispo(origem,destino):false;break;
-		case "cavalo" : movimenta = movimentoCavalo( origem,destino,false);break;
-		case "torre" :  movimenta = movimentoTorre(  origem,destino,false)?puloTorre(origem,destino):false;break;
-		case "rei" :    movimenta = movimentoRei(    origem,destino,false);break;
-		case "dama" :   movimenta = movimentoDama(   origem,destino,false)?puloDama(origem,destino):false;break;
+		case "bispo" :  movimenta = movimentoBispo(  origem,destino)?puloBispo(origem,destino):false;break;
+		case "cavalo" : movimenta = movimentoCavalo( origem,destino);break;
+		case "torre" :  movimenta = movimentoTorre(  origem,destino)?puloTorre(origem,destino):false;break;
+		case "rei" :    movimenta = movimentoRei(    origem,destino, false);break;
+		case "dama" :   movimenta = movimentoDama(   origem,destino)?puloDama(origem,destino):false;break;
 		}
 		if (movimenta) {
-			
-			destino.setPeca(origem.popPeca());
-			
+			if((this.qtdMovimentos%2==0 && origem.getPeca().getCor() == 'b')
+					|| this.qtdMovimentos%2!=0 && origem.getPeca().getCor() == 'p') {
+				
+				destino.setPeca(origem.popPeca());
+				destino.getPeca().incMovimento();
+				this.qtdMovimentos++;
+			}
+			else {
+				System.out.println("Vez do adversário");
+			}
 		}
 	}
 	
@@ -366,19 +406,24 @@ public class Movimento {
 		Boolean ataca = false;
 		switch (atacante.getPeca().getTipo().getTipo()) {
 		case "peao" :   ataca = ataquePeao(      atacante, alvo    );break;
-		case "bispo" :  ataca = movimentoBispo(  atacante,alvo,true)?puloBispo(atacante,alvo):false;break;
-		case "cavalo" : ataca = movimentoCavalo( atacante,alvo,true);break;
-		case "torre" :  ataca = movimentoTorre(  atacante,alvo,true)?puloTorre(atacante,alvo):false;break;
-		case "rei" :    ataca = movimentoRei(    atacante,alvo,true);break;
-		case "dama" :   ataca = movimentoDama(   atacante,alvo,true)?puloDama(atacante,alvo):false;break;
+		case "bispo" :  ataca = movimentoBispo(  atacante,alvo)?puloBispo(atacante,alvo):false;break;
+		case "cavalo" : ataca = movimentoCavalo( atacante,alvo);break;
+		case "torre" :  ataca = movimentoTorre(  atacante,alvo)?puloTorre(atacante,alvo):false;break;
+		case "rei" :    ataca = movimentoRei(    atacante,alvo,false);break;
+		case "dama" :   ataca = movimentoDama(   atacante,alvo)?puloDama(atacante,alvo):false;break;
 		}
 		if(ataca) {
+			
 		
 			
-			alvo.popPeca();
-			alvo.setPeca(atacante.popPeca());
+			if((this.qtdMovimentos%2==0 && atacante.getPeca().getCor() == 'b')
+					|| this.qtdMovimentos%2!=0 && atacante.getPeca().getCor() == 'p') {
+				alvo.popPeca();
+				alvo.setPeca(atacante.popPeca());
+				alvo.getPeca().incMovimento();
+				this.qtdMovimentos++;
 			
-			
+				}
 			}
 		
 		}

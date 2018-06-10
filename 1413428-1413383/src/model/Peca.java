@@ -9,49 +9,32 @@ import javax.imageio.ImageIO;
 
 public abstract class Peca {
 	
-	private char cor;
+	char cor;
 	private TipoPeca tipo;
-	private Image img;
+
 	int qtdMovimentos;
 	int linha;
 	int coluna;
 	boolean selecionada;
-	int qtdMovimentosPossiveis;
-
+	String url;
 	
-	public Peca(TipoPeca tipo, char cor, int linha, int coluna) {
+	public Peca(TipoPeca tipo, char cor) {
 		this.cor = cor;
 		this.tipo = tipo;
 		this.qtdMovimentos = 0;
-		this.coluna = coluna;
-		this.linha = linha;
-		this.qtdMovimentosPossiveis = 2;
-		String url = "src/images/"+cor+"_"+tipo.getTipo()+".gif";
 		
-		try {
-			this.img = ImageIO.read(new File(url));
-		}catch(IOException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Erro ao tentar ler a imagem");
-			System.exit(1);
-		}
+		this.url = "src/images/"+cor+"_"+tipo.getTipo()+".gif";
+	
 	}
 	
-	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estï¿½o os x possï¿½veis e na segunda coluna estï¿½o os y possï¿½veis 
-	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peï¿½a referente a algum movimento possï¿½vel
-	 * considerando a localizaï¿½ï¿½o atual da peï¿½a */
-	public abstract int[][] getMovimentos(int linhaCasa, int colunaCasa, char cor); 
-	
-	public void setImage(Image img) {
-		this.img = img;
-	}
+	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estão os x possíveis e na segunda coluna estão os y possíveis 
+	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peça referente a algum movimento possível
+	 * considerando a localização atual da peça */
+	public abstract int[][] getMovimentos(); 
+
 	
 	public int getQtdMovimentos() {
-		return this.qtdMovimentos;
-	}
-	
-	public void incrementaMovimento() {
-		this.qtdMovimentos = this.qtdMovimentos + 1;
+		return qtdMovimentos;
 	}
 	
 	public TipoPeca getTipo() {
@@ -62,18 +45,20 @@ public abstract class Peca {
 		return linha;
 	}
 	
+	public void setLinha(int linha) {
+		this.linha = linha;
+	}
+	
 	public int getColuna() {
 		return coluna;
 	}
-	public Image getImage() {
-		return img;
+
+	public void setColuna(int coluna) {
+		this.coluna = coluna;
 	}
-	
 	public void selecionaPeca() {
 		this.selecionada = true;
-		//System.out.println(this.tipo.getTipo());
-		//System.out.println("linha:"+String.valueOf(this.getLinha()));
-		//System.out.println("coluna:"+String.valueOf(this.getColuna()));
+
 	}
 	
 	public void desselecionaPeca() {
@@ -81,8 +66,15 @@ public abstract class Peca {
 	}
 	
 	public char getCor() {
-		return cor;
+		return this.cor;
+	}
+	
+	public String getUrl() {
+		return this.url;
 	}
 
+	public void incMovimento() {
+		this.qtdMovimentos++;
+	}
 
 }
