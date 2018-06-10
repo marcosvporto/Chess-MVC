@@ -11,8 +11,7 @@ import javax.swing.JPanel;
 public class ChessFrame extends JFrame {
 	
 	
-	//private final int LARG_DEFAULT=700;
-	//private final int ALT_DEFAULT=700;
+
 	
 	
 	public ChessFrame(String s, int larg, int alt) {

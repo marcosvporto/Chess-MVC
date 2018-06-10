@@ -1,28 +1,36 @@
 package view;
 
-import model.Peao;
-import model.Peca;
-import model.Bispo;
 import model.Casa;
-import model.Cavalo;
-import model.Dama;
-import model.Rei;
 import model.Tabuleiro;
 import model.TipoPeca;
-import model.Torre;
-import controller.Movimento;
-import controller.Partida;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+
+import controller.Movimento;
+
+
+
+
+
 
 
 public class ChessPanel extends JPanel {
+	
 	
 	int i, j;
 	double leftX=100.0;
@@ -31,25 +39,35 @@ public class ChessPanel extends JPanel {
 	double alt=80.0;
 	public static boolean carregarPecas=true;
 	public static boolean carregarTabuleiro=true;
+	TipoPeca tipo = TipoPeca.peao;
+	int colunaPromo = -1;
+	int linhaPromo = -1;
 	Tabuleiro t;
+	Rectangle2D [][] matrizRect;
 	
 	
 	public ChessPanel() {
-		
+		t = Tabuleiro.getTabuleiro();
 		setBackground(Color.WHITE);
 		this.addMouseListener(new MouseAdapter() {
 			
 			public void mouseClicked(MouseEvent e) {
-				
 				int x = e.getX();
 				int y = e.getY();
-				
-				//marca casa selecionada
-				t.selecionaCasa(x, y);
 
-				//Movimento.trataMovimento(t);
+				for(int i = 0; i < 8 ; i++) {
+					for(int j = 0; j<8;j++) {
+						if (matrizRect[i][j].contains(x,y))
+							t.selecionaCasa(i, j);
+					}
+						
+				}
+				
+	
 				repaint();
+				
 			}
+			
 		});
 		
 		
@@ -57,133 +75,157 @@ public class ChessPanel extends JPanel {
 	
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		
 		Graphics2D g2d = (Graphics2D) g;
-		
 		if(carregarTabuleiro)
 			carregarTabuleiro(g2d);
-
-		alteraCorCasaSelecionada(g2d);	
-		
+		alteraCorCasaSelecionada(g2d);
 		if(carregarPecas)
 			carregarPecas(g2d);
+		
+			
+		
+		
+		
+		
 	}
 	
-	
 	public void carregarTabuleiro(Graphics2D g2d) {
+		this.matrizRect = new Rectangle2D[8][8];
+
 		Casa [][]r = t.getMatrizCasas();
 		for(int i = 0;i<8;i++) {
 			for(int j = 0;j<8;j++) {
-				//System.out.println(r[i][j].getCenterX());
-				g2d.draw(r[i][j].getRetangulo());
+				int left = r[i][j].getLeft();
+				int top = r[i][j].getTop();
+				int dim  =r[i][j].getDim();
+				this.matrizRect[i][j] = new Rectangle2D.Float(left,top,dim,dim);
+				g2d.draw(this.matrizRect[i][j]);
 				if((i%2==0) && (j%2!=0))
-					g2d.fill(r[i][j].getRetangulo());
+					g2d.fill(this.matrizRect[i][j]);
 				else if((i%2!=0) && (j%2==0))
-					g2d.fill(r[i][j].getRetangulo());
+					g2d.fill(this.matrizRect[i][j]);
+				
+				
+				
 			}
 		}
 	}
 		
 		
 	public void carregarPecas(Graphics2D g2d) {
+
+		int linhaPeao = 0;
+		int colunaPeao = 0;
 		Casa [][]c = t.getMatrizCasas();
+		Image im;
 		for(int i = 0;i<8;i++) {
 			for(int j=0;j<8;j++) {
 				if(c[i][j].isOcupada()) {
-					int altPeca = c[i][j].getPeca().getImage().getHeight(null);
-					int largPeca = c[i][j].getPeca().getImage().getWidth(null);
-					int imgTop = (int) c[i][j].getRetangulo().getCenterY()-(altPeca/2);
-					int imgLeft = (int) c[i][j].getRetangulo().getCenterX()-(largPeca/2);
-					g2d.drawImage(c[i][j].getPeca().getImage(),imgLeft,imgTop,null);
+					try {
+						im = ImageIO.read(new File(c[i][j].getPeca().getUrl()));
+						int altPeca = im.getHeight(null);
+						int largPeca = im.getWidth(null);
+						int imgTop = (int) this.matrizRect[i][j].getCenterY()-(altPeca/2);
+						int imgLeft = (int) (int) this.matrizRect[i][j].getCenterX()-(largPeca/2);
+						g2d.drawImage(im,imgLeft,imgTop,null);
+					}catch(IOException ex) {
+						System.out.println(ex.getMessage());
+						System.out.println("Erro ao tentar ler a imagem");
+						System.exit(1);
+					}
+				if((j==0 || j==7)) {
+					if(c[i][j].getPeca().getTipo().equals(TipoPeca.peao)) {
+						colunaPromo = i;
+						linhaPromo = j;
+					}
 				}
 			}
 		}
 	}
-	
+		if (colunaPromo != -1 && linhaPromo != -1) {
+			JPopupMenu menu = new JPopupMenu();
+			JMenuItem dama = new JMenuItem("Dama");
+			JMenuItem bispo = new JMenuItem("Bispo");
+			JMenuItem torre = new JMenuItem("Torre");
+			JMenuItem cavalo = new JMenuItem("Cavalo");
+			dama.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tipo = TipoPeca.dama;
+				}
+			});
+			bispo.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tipo = TipoPeca.bispo;
+				}
+			});
+			torre.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tipo = TipoPeca.torre;
+				}
+			});
+			cavalo.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					tipo = TipoPeca.cavalo;
+				}
+			});
+			menu.add(dama);
+			menu.add(bispo);
+			menu.add(torre);
+			menu.add(cavalo);
+			menu.show(this,(int) this.matrizRect[colunaPromo][linhaPromo].getCenterX(), 
+					(int)this.matrizRect[colunaPromo][linhaPromo].getCenterY());
+			
+			if(!tipo.equals(TipoPeca.peao)) {
+				t.promovePeao(tipo, c[colunaPromo][linhaPromo]);
+				menu.setVisible(false);
+				tipo = TipoPeca.peao;
+				colunaPromo = -1;
+				linhaPromo = -1;
+				this.repaint();
+			}
+		}
+	}
 	public void alteraCorCasaSelecionada(Graphics2D g2d) {
-		
 		Casa [][]c = t.getMatrizCasas();
-		int linha = -1;
-		int coluna = -1;
 
-
-		//identifica casa selecionada
 		for(int i = 0;i<8;i++) {
 			for(int j=0;j<8;j++) {
-				
-				if( c[i][j].equals( t.getCasaSelecionada() ) ) {
+				if(c[i][j].equals(t.getCasaSelecionada())) {
+					g2d.setPaint(Color.GRAY);
+					g2d.fill(this.matrizRect[i][j]);
 					
-					//pinta casa selecionada
-					pintaCasaSelecionada(Color.GRAY, c[i][j], g2d);
-					
-					linha = j; 
-					coluna = i;
-					break;
 				}
-				/*if(c[i][j].getPermissao()) {
-					g2d.setPaint(Color.GREEN);
-					g2d.fill(r[i][j]);
-				}*/
+				else {
+					if(c[i][j].getPermissao()) {
+						g2d.setPaint(new Color(153,255,153));
+						g2d.fill(this.matrizRect[i][j]);
+						g2d.setPaint(Color.BLACK);
+						g2d.draw(this.matrizRect[i][j]);
+					}
+				}
+				
 			}
 		}
 		
-		//pinta possiveis movimentos
-		if(linha != -1 && coluna != -1) {
-			
-			char cor =  t.getCasaSelecionada().getPeca().getCor();
-
-			int movimentos [][] = t.getCasaSelecionada().getPeca().getMovimentos(linha, coluna, cor);
-			//	       	MOVIMENTO 1  	MOVIMENTO 2		MOVIMENTO 3		...
-			//         |linha i     | linha i    	| linha i  		|     
-			//         |coluna j    | coluna j    	| coluna j   	|  
-			
-			System.out.println(t.getCasaSelecionada().getPeca().getTipo());
-			System.out.println(t.getCasaSelecionada().getPeca().getQtdMovimentos());
-			
-			int cols = movimentos[0].length; 
-			
-			//pinta possiveis movimentos da peca
-			for(int j=0;j<cols;j++) {
-
-				int linhaTabuleiro = movimentos[1][j];
-				int colunaTabuleiro = movimentos[0][j];
-				
-				//verifica se o i e j estao dentro do intervalo do tabuleiro
-				if(linhaTabuleiro>=0 && linhaTabuleiro <=7 && colunaTabuleiro >=0 && colunaTabuleiro <=7) {
-					
-					Casa casaSelecionada = t.getCasaSelecionada();
-					Casa casaPossivelMovimento = c[linhaTabuleiro][colunaTabuleiro];
-					
-					if(c[linhaTabuleiro][colunaTabuleiro].getPeca() != null) {
-						char tipoPeca = t.getMatrizCasas()[linhaTabuleiro][colunaTabuleiro].getPeca().getCor();
-						System.out.println(tipoPeca);
-					}
-					
-					//verifica se existe peca na casa && a cor da peca selecionada é diferente da cor da peca da casa
-					if( casaPossivelMovimento.getPeca()==null ) {
-						pintaCasaSelecionada(Color.GRAY, c[linhaTabuleiro][colunaTabuleiro], g2d);
-					} else {
-						if(casaPossivelMovimento.getPeca().getCor() != casaSelecionada.getPeca().getCor()) {
-							pintaCasaSelecionada(Color.GRAY, c[linhaTabuleiro][colunaTabuleiro], g2d);
-						}
-					}
+	
+	
 		
-					
-				}
-					
-			}//fim do for j
-		}//fim do if
+		
+	
+		
 	}
+	
 	
 
-	public void pintaCasaSelecionada(Color cor, Casa casa, Graphics2D g2d) {
-		g2d.setPaint(cor);
-		g2d.fill(casa.getRetangulo());
-	}
 	
 	
-	public void setTabuleiro(Tabuleiro t) {
-		this.t = t;
-	}
 
 }
