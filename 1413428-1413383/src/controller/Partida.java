@@ -1,26 +1,31 @@
 package controller;
 
-import java.io.IOException;
+
 import view.ChessPanel;
-import controller.Principal;
-import model.*;
-import java.io.PrintWriter;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import model.*;
 
 public class Partida {
+	
 	
 	static Tabuleiro t;
 	private static BufferedReader bufferedReader;
 	
 	public Partida() {
+		
 		t = Tabuleiro.getTabuleiro();
+		
 	}
 	
 	public static void comecarPartida(ChessPanel p, String input) {
 		Casa[][] c;
+
 		c = t.getMatrizCasas();
-		
 		switch (input) {
         case "1":
         		// INICIALIZA A MATRIZ COM ROQUE CURTO
@@ -33,7 +38,8 @@ public class Partida {
 			break;
             
         case "3":
-            System.out.println("Terça-feira");
+        	// INICIALIZA A MATRIZ COM XEQUE
+        				getSavedGame( Principal.path + "src/files/3.txt", c);
             break;
             
         case "4":
@@ -88,9 +94,12 @@ public class Partida {
         default:
              System.out.println("Este não é um dia válido!");
      }	
-	}
-	
+		t.addPossiveisPecas();
 
+		
+		
+		
+	}
 	
 	public void save(String filePath) {		
 		try {
@@ -164,6 +173,6 @@ public class Partida {
 			System.exit(1);			
 		}//fim do catch
 		
-	}// fim da funcao getSavedGame()
+	}
 	
-}//fim da classe Partida
+}

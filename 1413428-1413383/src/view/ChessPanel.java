@@ -24,6 +24,11 @@ import javax.swing.JPopupMenu;
 import controller.Movimento;
 
 
+
+
+
+
+
 public class ChessPanel extends JPanel {
 	
 	
@@ -58,10 +63,14 @@ public class ChessPanel extends JPanel {
 						
 				}
 				
-				repaint();
-			}
-		});
 	
+				repaint();
+				
+			}
+			
+		});
+		
+		
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -72,6 +81,11 @@ public class ChessPanel extends JPanel {
 		alteraCorCasaSelecionada(g2d);
 		if(carregarPecas)
 			carregarPecas(g2d);
+		
+			
+		
+		
+		
 		
 	}
 	
