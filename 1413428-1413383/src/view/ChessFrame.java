@@ -10,6 +10,10 @@ import javax.swing.JPanel;
 
 public class ChessFrame extends JFrame {
 	
+	
+
+	
+	
 	public ChessFrame(String s, int larg, int alt) {
 		super(s);
 		Toolkit tk=Toolkit.getDefaultToolkit();
@@ -22,9 +26,10 @@ public class ChessFrame extends JFrame {
 		
 		setBounds(x,y,larg,alt);
 		
+		
 		setSize(larg,alt);
 		setResizable(false);
-		//setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
 	
