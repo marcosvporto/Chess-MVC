@@ -1,10 +1,7 @@
 package controller;
 
-import java.util.ArrayList;
-
 import model.Casa;
 import model.Peca;
-import model.Rei;
 import model.Tabuleiro;
 import model.TipoPeca;
 
@@ -276,7 +273,6 @@ public class Movimento {
 		return false;
 	}
 	public boolean validaRoque(Casa origem, Casa destino, boolean teste) {
-		
 		if(puloTorre(origem,destino) && origem.getPeca().getQtdMovimentos()==0) {
 			if(origem.getColuna() - destino.getColuna()<0) {//roque curto
 				
@@ -284,15 +280,13 @@ public class Movimento {
 						this.matrizCasa[7][origem.getLinha()].getPeca().getTipo().equals(TipoPeca.torre) &&
 						this.matrizCasa[7][origem.getLinha()].getPeca().getQtdMovimentos()==0) {
 					//verifica se a torre está na posição inicial e ainda não se movimentou
-					
+				
 					if(!this.matrizCasa[5][origem.getLinha()].isOcupada()) {
-						
 						//verifica se o rei não pulou ninguém
 						if(!teste) {
-							System.out.println("ROQUE");
 							this.matrizCasa[7][origem.getLinha()].getPeca().incMovimento();
 							this.matrizCasa[5][origem.getLinha()].setPeca(this.matrizCasa[7][origem.getLinha()].popPeca());
-							
+
 							return true;
 						}
 						return true;
@@ -385,76 +379,54 @@ public class Movimento {
 
 	public void validaMovimento(Casa origem, Casa destino) {
 
-		if(destino.getPermissao()) {
+		Boolean movimenta = false;
+		switch (origem.getPeca().getTipo().getTipo()) {
+		case "peao" :   movimenta = movimentoPeao(   origem,destino);break;
+		case "bispo" :  movimenta = movimentoBispo(  origem,destino)?puloBispo(origem,destino):false;break;
+		case "cavalo" : movimenta = movimentoCavalo( origem,destino);break;
+		case "torre" :  movimenta = movimentoTorre(  origem,destino)?puloTorre(origem,destino):false;break;
+		case "rei" :    movimenta = movimentoRei(    origem,destino, false);break;
+		case "dama" :   movimenta = movimentoDama(   origem,destino)?puloDama(origem,destino):false;break;
+		}
+		if (movimenta) {
 			if((this.qtdMovimentos%2==0 && origem.getPeca().getCor() == 'b')
 					|| this.qtdMovimentos%2!=0 && origem.getPeca().getCor() == 'p') {
-				if(origem.getPeca().getTipo().equals(TipoPeca.rei)) {
-					movimentoRei(origem, destino, false);
-				}
+				
 				destino.setPeca(origem.popPeca());
 				destino.getPeca().incMovimento();
 				this.qtdMovimentos++;
-				Tabuleiro.getTabuleiro().addPossiveisPecas();
-				Tabuleiro.getTabuleiro().preencheRange();
-				if(!verificaXeque(destino.getPeca())) {
-					Tabuleiro.getTabuleiro().negaXeque();
-				}
 			}
 			else {
 				System.out.println("Vez do adversário");
 			}
 		}
-		
 	}
 	
 	public void validaAtaque(Casa atacante, Casa alvo) {
+		Boolean ataca = false;
+		switch (atacante.getPeca().getTipo().getTipo()) {
+		case "peao" :   ataca = ataquePeao(      atacante, alvo    );break;
+		case "bispo" :  ataca = movimentoBispo(  atacante,alvo)?puloBispo(atacante,alvo):false;break;
+		case "cavalo" : ataca = movimentoCavalo( atacante,alvo);break;
+		case "torre" :  ataca = movimentoTorre(  atacante,alvo)?puloTorre(atacante,alvo):false;break;
+		case "rei" :    ataca = movimentoRei(    atacante,alvo,false);break;
+		case "dama" :   ataca = movimentoDama(   atacante,alvo)?puloDama(atacante,alvo):false;break;
+		}
+		if(ataca) {
+			
 		
-		if(alvo.getPermissao()) {
+			
 			if((this.qtdMovimentos%2==0 && atacante.getPeca().getCor() == 'b')
 					|| this.qtdMovimentos%2!=0 && atacante.getPeca().getCor() == 'p') {
-				
 				alvo.popPeca();
 				alvo.setPeca(atacante.popPeca());
 				alvo.getPeca().incMovimento();
 				this.qtdMovimentos++;
-				Tabuleiro.getTabuleiro().addPossiveisPecas();
-				Tabuleiro.getTabuleiro().preencheRange();
-				if(!verificaXeque(alvo.getPeca())) {
-					Tabuleiro.getTabuleiro().negaXeque();
-				}
 			
-			}
-			else {
-				System.out.println("Vez do adversário");
-			}
-		}
-		
-	
-		
-		
-	}
-	public boolean verificaXeque(Peca p) {
-		Rei r;
-		ArrayList<Peca> ameacas;
-		for(int i=0;i<8;i++) {
-			for(int j=0;j<8;j++) {
-				Casa c = this.matrizCasa[i][j];
-				if(c.isOcupada()) {
-					if(c.getPeca().getTipo().equals(TipoPeca.rei)) {
-						r = (Rei)c.getPeca();
-						if(c.possivelTomada()) {
-							ameacas = c.getPossiveisPecas();
-							r.setAmeacas(ameacas);
-							Tabuleiro.getTabuleiro().setReiAmeacado(r);
-							
-							return true;
-						}
-					}
 				}
 			}
+		
 		}
-		return false;
 	}
-}
 
 

@@ -4,7 +4,6 @@ package model;
 
 public class Bispo extends Peca {
 
-	
 	public Bispo(char cor){
 		super(TipoPeca.bispo,cor);
 		
