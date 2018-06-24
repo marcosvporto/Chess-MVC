@@ -5,13 +5,14 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import controller.Principal;
 ;
 
 public abstract class Peca {
-	
+
 	char cor;
 	private TipoPeca tipo;
-
 	int qtdMovimentos;
 	int linha;
 	int coluna;
@@ -23,13 +24,13 @@ public abstract class Peca {
 		this.tipo = tipo;
 		this.qtdMovimentos = 0;
 		
-		this.url = "src/images/"+cor+"_"+tipo.getTipo()+".gif";
+		this.url = Principal.path + "src/images/"+cor+"_"+tipo.getTipo()+".gif";
 	
 	}
 	
-	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estão os x possíveis e na segunda coluna estão os y possíveis 
-	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peça referente a algum movimento possível
-	 * considerando a localização atual da peça */
+	/* getMovimentos retorna uma matriz de 2*m em que na primeira coluna estï¿½o os x possï¿½veis e na segunda coluna estï¿½o os y possï¿½veis 
+	 * ou seja cada linha possui um par (x,y) que representa a casa destino da peï¿½a referente a algum movimento possï¿½vel
+	 * considerando a localizaï¿½ï¿½o atual da peï¿½a */
 	public abstract int[][] getMovimentos(); 
 
 	

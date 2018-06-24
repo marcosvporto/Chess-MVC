@@ -27,7 +27,7 @@ public class Casa {
 		this.selecionada = false;
 		this.ocupada = false;
 		
-		
+		this.p = null;
 	}
 	
 
